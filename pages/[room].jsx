@@ -2,12 +2,17 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import io from 'socket.io-client';
 
+import styles from '../styles/Home.module.css';
+import Header from '../components/Header';
+import Image from 'next/image';
+
 let socket;
 
 const playerState = { id: '', name: '', move: '' };
 
 const Room = () => {
 	const router = useRouter();
+
 	const { room } = router.query;
 
 	const [phase, setPhase] = useState('Waiting');
@@ -138,36 +143,80 @@ const Room = () => {
 		</div>
 	);
 
-	return (
+	const renderResult = () => (
 		<div>
-			<div>
-				<div>Opponent</div>
-				{phase === 'Result' && <div>{opponent.move}</div>}
-			</div>
-
-			<br />
-
-			<div>
-				<div>You</div>
-				{player.move && <div>{player.move}</div>}
-
-				{phase === 'Ready' && (
-					<div>
-						<button onClick={() => handleMove(1)}>Rock</button>
-						<button onClick={() => handleMove(2)}>Paper</button>
-						<button onClick={() => handleMove(3)}>Scissors</button>
-					</div>
-				)}
-			</div>
-
-			<div>
-				{phase === 'Result' && (
-					<div>
-						{playerWin ? <span>You Won!</span> : <span>You Lost!</span>}
-					</div>
-				)}
-			</div>
+			{phase === 'Result' && (
+				<div>
+					{playerWin ? <span>You Won!</span> : <span>You Lost!</span>}
+				</div>
+			)}
 		</div>
+	);
+
+	return (
+		<main className={styles.main}>
+			<div className={styles.container}>
+				<div className={styles.header}>
+					<div className={styles.shareText}>Click to Share this Room</div>
+					<div className={styles.roomCode}>{room}</div>
+				</div>
+
+				<div className={styles.innerContent}>
+					<div>
+						<div>Opponent</div>
+						{phase === 'Result' && <div>{opponent.move}</div>}
+					</div>
+
+					<div>
+						<div>You</div>
+						{player.move && <div>{player.move}</div>}
+
+						{phase === 'Ready' && (
+							<div className={styles.moves}>
+								<div
+									className={styles.move}
+									onClick={() => handleMove(1)}
+								>
+									<Image
+										src={'/assets/icons/Rock.png'}
+										alt="Rock"
+										height={56}
+										width={56}
+									/>
+								</div>
+								<div
+									className={styles.move}
+									onClick={() => handleMove(2)}
+								>
+									<Image
+										src={'/assets/icons/Paper.png'}
+										alt="Paper"
+										height={56}
+										width={56}
+									/>
+								</div>
+								<div
+									className={styles.move}
+									onClick={() => handleMove(3)}
+								>
+									<Image
+										src={'/assets/icons/Scissors.png'}
+										alt="Scissors"
+										height={56}
+										width={56}
+									/>
+								</div>
+							</div>
+						)}
+					</div>
+				</div>
+				<div className={styles.buttons}>
+					<button className={styles.button} onClick={() => router.back()}>
+						Leave Room
+					</button>
+				</div>
+			</div>
+		</main>
 	);
 };
 

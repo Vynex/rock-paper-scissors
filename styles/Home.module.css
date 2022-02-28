@@ -1,0 +1,156 @@
+.main {
+   height: 100%;
+   background: #313552;
+
+   display: flex;
+   justify-content: center;
+}
+
+.container {
+   padding: 3rem 0;
+
+   height: 100vh;
+   width: 100%;
+
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.header {
+   width: 100%;
+
+   /* flex: 1; */
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.banner {
+   height: 8rem;
+   width: 80%;
+
+   background-image: url('../public/assets/Banner.jpg');
+   background-position: 50% 41%;
+   background-repeat: no-repeat;
+   background-size: cover;
+}
+
+.heading {
+   margin: 0.5rem 0;
+   font-size: 2rem;
+   color: #EEE6CE;
+   text-shadow: 1px 1px #151D3B;
+}
+
+.buttons {
+   width: 100%;
+
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.button {
+   margin: 0.8rem 0;
+
+   height: 2rem;
+   width: 90%;
+
+   color: #ECECEC;
+   font-size: 1.1rem;
+   text-shadow: 1px 1px #151D3B;
+
+   background: #B8405E;
+   border: none;
+   border-radius: 5px;
+
+   cursor: pointer;
+}
+
+.button:hover {
+   background: #c2506c;
+}
+
+.innerContent {
+   height: 1.5rem;
+   width: 100%;
+
+   flex: 1;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.innerContent input {
+   height: 3rem;
+   width: 80%;
+   padding: 0.5rem 1.2rem;
+
+   color: #EEE6CE;
+   font-size: 1.2rem;
+   background-color: #181a29;
+
+   border: none;
+   border-radius: 5px;
+}
+
+.shareText {
+   margin: 0.4rem 0;
+   font-size: 0.8rem;
+   color: #E8DDBD;
+}
+
+.roomCode {
+   height: 3rem;
+   width: 80%;
+   padding: 0.5rem 1.2rem;
+
+   color: #CDDEFF;
+   background-color: #181a29;
+
+   font-size: 1.4rem;
+   letter-spacing: 0.4rem;
+   text-align: center;
+
+   cursor: pointer;
+}
+
+.roomCode:hover {
+   background-color: #1c1f31;
+}
+
+.moves {
+   display: flex;
+}
+
+.move {
+   margin: 0 0.5rem;
+   height: 80px;
+   width: 80px;
+
+   background: #EEE6CE;
+
+   border-radius: 50%;
+   border: 4px solid #181a29;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   cursor: pointer;
+   user-select: none;
+   user-drag: none;
+}
+
+.move:hover {
+   background: #E8DDBD;
+}
+
+
+@media only screen and (min-device-width: 768px) {
+   .container {
+      width: 500px;
+   }
+}

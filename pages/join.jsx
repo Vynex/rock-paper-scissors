@@ -1,5 +1,9 @@
-import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+
+import Head from 'next/head';
+import styles from '../styles/Home.module.css';
+import Header from '../components/Header';
 
 const Join = () => {
 	const router = useRouter();
@@ -10,19 +14,31 @@ const Join = () => {
 	};
 
 	return (
-		<div>
-			<div>
-				<input
-					placeholder="Room ID"
-					value={roomID}
-					onChange={(e) => setRoomID(e.target.value)}
-				/>
-			</div>
+		<>
+			<Head>
+				<title>Rock-Paper-Scissors || Join</title>
+			</Head>
 
-			<div>
-				<button onClick={handleClick}>Join Room</button>
-			</div>
-		</div>
+			<main className={styles.main}>
+				<div className={styles.container}>
+					<Header />
+
+					<section className={styles.innerContent}>
+						<input
+							placeholder="Room ID"
+							value={roomID}
+							onChange={(e) => setRoomID(e.target.value)}
+						/>
+					</section>
+
+					<div className={styles.buttons}>
+						<button className={styles.button} onClick={handleClick}>
+							Join Room
+						</button>
+					</div>
+				</div>
+			</main>
+		</>
 	);
 };
 
