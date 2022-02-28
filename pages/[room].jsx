@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import io from 'socket.io-client';
 
-fetch('http://localhost:3000/api/socket');
-let socket = io();
+let socket;
 
 const playerState = { id: '', name: '', move: '' };
 
@@ -20,6 +19,9 @@ const Room = () => {
 	const [playerWin, setPlayerWin] = useState(false);
 
 	useEffect(() => {
+		fetch(`${location.protocol + '//' + location.host}/api/socket`);
+		socket = io();
+
 		socket.on('connect', () => {
 			console.log(`Connected as ${socket.id}`);
 
