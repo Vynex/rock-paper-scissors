@@ -2,9 +2,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import io from 'socket.io-client';
 
+import Move from '../components/move';
 import styles from '../styles/Home.module.css';
-import Header from '../components/Header';
-import Image from 'next/image';
 
 let socket;
 
@@ -12,16 +11,22 @@ const playerState = { id: '', name: '', move: '' };
 
 const Room = () => {
 	const router = useRouter();
-
-	const { room } = router.query;
+	let { room } = router.query;
 
 	const [phase, setPhase] = useState('Waiting');
-	const [name, setName] = useState('');
 
 	const [player, setPlayer] = useState(playerState);
 	const [opponent, setOpponent] = useState(playerState);
 
-	const [playerWin, setPlayerWin] = useState(false);
+	const [result, setResult] = useState(false);
+
+	const cleanUp = () => {
+		socket.disconnect();
+	};
+
+	useEffect(() => {
+		if (room && room.length !== 4) router.push('/');
+	}, [room, router]);
 
 	useEffect(() => {
 		fetch(`${location.protocol + '//' + location.host}/api/socket`);
@@ -41,7 +46,7 @@ const Room = () => {
 		socket.on('user-joined', (user) => {
 			console.log(`${user.id} joined the Room.`);
 
-			user.id = socket.id;
+			user.id = user.id;
 			user.name = 'Player 2';
 			user.move = '';
 
@@ -52,14 +57,10 @@ const Room = () => {
 			setOpponent((opp) => ({ ...opp, move: move }));
 		});
 
-		socket.on('game-finished', (winner) => {
+		socket.on('game-finished', (result) => {
 			setPhase('Result');
-			if (winner === socket.id) setPlayerWin(true);
+			setResult(result);
 		});
-
-		const cleanUp = () => {
-			socket.disconnect();
-		};
 
 		window.addEventListener('beforeunload', cleanUp);
 
@@ -70,17 +71,17 @@ const Room = () => {
 
 	useEffect(() => {
 		socket.on('room-full', (roomID) => {
-			console.log(`Room ID ${roomID} is Full.`);
+			console.log(`Room ID ${roomID.toUpperCase()} is Full.`);
 			router.push('/');
 		});
 	}, [router]);
 
 	useEffect(() => {
 		if (room)
-			socket.emit('join-room', room, (users) => {
+			socket.emit('join-room', room.toUpperCase(), (users) => {
 				if (users.length === 2) {
 					const user = {
-						id: users[0].id,
+						id: users[0].user,
 						name: 'Player 2',
 						move: '',
 					};
@@ -97,8 +98,14 @@ const Room = () => {
 		});
 	}, []);
 
-	const handleReady = () => {
-		socket.emit('set-ready', name);
+	const handleLeave = () => {
+		cleanUp();
+		router.back();
+	};
+
+	const handleRoomCopy = () => {
+		const link = `${location.protocol + '//' + location.host}/${room.toUpperCase()}`;
+		navigator.clipboard.writeText(link);
 	};
 
 	const handleMove = (moveID) => {
@@ -123,32 +130,24 @@ const Room = () => {
 		setPlayer((pla) => ({ ...pla, move: move }));
 
 		console.log('throwing', move);
-		socket.emit('throw-hand', move, (winner) => {
-			if (winner) {
+		socket.emit('throw-hand', move, (result) => {
+			if (result) {
 				setPhase('Result');
-				if (winner === socket.id) setPlayerWin(true);
+				setResult(result);
 			}
 		});
 	};
 
-	const renderName = () => (
-		<div>
-			<input
-				name="name"
-				placeholder="Enter Name"
-				value={name}
-				onChange={(e) => setName(e.target.value)}
-			/>
-			<button onClick={handleReady}>Get Ready</button>
-		</div>
-	);
-
 	const renderResult = () => (
 		<div>
 			{phase === 'Result' && (
-				<div>
-					{playerWin ? <span>You Won!</span> : <span>You Lost!</span>}
-				</div>
+				<>
+					<div>
+						{result.winner === player.id && <span>You Won!</span>}
+						{result.winner === opponent.id && <span>You Lost!</span>}
+						{result.winner === null && <span>Game Tied!</span>}
+					</div>
+				</>
 			)}
 		</div>
 	);
@@ -158,60 +157,66 @@ const Room = () => {
 			<div className={styles.container}>
 				<div className={styles.header}>
 					<div className={styles.shareText}>Click to Share this Room</div>
-					<div className={styles.roomCode}>{room}</div>
+					<div className={styles.roomCode} onClick={handleRoomCopy}>
+						{room?.toUpperCase()}
+					</div>
 				</div>
 
 				<div className={styles.innerContent}>
-					<div>
-						<div>Opponent</div>
-						{phase === 'Result' && <div>{opponent.move}</div>}
-					</div>
+					<div className={styles.gameArea}>
+						<div className={styles.opponentArea}>
+							{phase === 'Result' && (
+								<div className={styles.finalMove}>
+									<Move move={opponent.move} result />
+								</div>
+							)}
+						</div>
 
-					<div>
-						<div>You</div>
-						{player.move && <div>{player.move}</div>}
-
-						{phase === 'Ready' && (
-							<div className={styles.moves}>
-								<div
-									className={styles.move}
-									onClick={() => handleMove(1)}
-								>
-									<Image
-										src={'/assets/icons/Rock.png'}
-										alt="Rock"
-										height={56}
-										width={56}
-									/>
-								</div>
-								<div
-									className={styles.move}
-									onClick={() => handleMove(2)}
-								>
-									<Image
-										src={'/assets/icons/Paper.png'}
-										alt="Paper"
-										height={56}
-										width={56}
-									/>
-								</div>
-								<div
-									className={styles.move}
-									onClick={() => handleMove(3)}
-								>
-									<Image
-										src={'/assets/icons/Scissors.png'}
-										alt="Scissors"
-										height={56}
-										width={56}
-									/>
-								</div>
+						<div className={styles.versus}>
+							<div className={styles.playerTitle}>Opponent</div>
+							<div>
+								{phase === 'Result' ? renderResult() : <span>Vs.</span>}
 							</div>
-						)}
+							<div className={styles.playerTitle}>You</div>
+						</div>
+
+						<div className={styles.playerArea}>
+							<div>
+								{phase === 'Result' && (
+									<div className={styles.finalMove}>
+										<Move move={player.move} result />
+									</div>
+								)}
+
+								{phase === 'Ready' && (
+									<div className={styles.moves}>
+										<div
+											className={styles.move}
+											onClick={() => handleMove(1)}
+										>
+											<Move move="Rock" />
+										</div>
+										<div
+											className={styles.move}
+											onClick={() => handleMove(2)}
+										>
+											<Move move="Paper" />
+										</div>
+										<div
+											className={styles.move}
+											onClick={() => handleMove(3)}
+										>
+											<Move move="Scissors" />
+										</div>
+									</div>
+								)}
+							</div>
+						</div>
 					</div>
 				</div>
+
 				<div className={styles.buttons}>
-					<button className={styles.button} onClick={() => router.back()}>
+					<button className={styles.button} onClick={handleLeave}>
 						Leave Room
 					</button>
 				</div>

@@ -1,6 +1,6 @@
 .main {
    height: 100%;
-   background: #313552;
+   background: #07074c;
 
    display: flex;
    justify-content: center;
@@ -54,14 +54,14 @@
 .button {
    margin: 0.8rem 0;
 
-   height: 2rem;
+   height: 3.2rem;
    width: 90%;
 
    color: #ECECEC;
-   font-size: 1.1rem;
+   font-size: 1.2rem;
    text-shadow: 1px 1px #151D3B;
 
-   background: #B8405E;
+   background: #5c21e2;
    border: none;
    border-radius: 5px;
 
@@ -69,7 +69,7 @@
 }
 
 .button:hover {
-   background: #c2506c;
+   background: #8228f1;
 }
 
 .innerContent {
@@ -88,8 +88,10 @@
    width: 80%;
    padding: 0.5rem 1.2rem;
 
-   color: #EEE6CE;
    font-size: 1.2rem;
+   letter-spacing: 0.2rem;
+
+   color: #EEE6CE;
    background-color: #181a29;
 
    border: none;
@@ -105,14 +107,16 @@
 .roomCode {
    height: 3rem;
    width: 80%;
-   padding: 0.5rem 1.2rem;
 
    color: #CDDEFF;
    background-color: #181a29;
 
-   font-size: 1.4rem;
+   font-size: 1.6rem;
    letter-spacing: 0.4rem;
-   text-align: center;
+   
+   display: flex;
+   align-items: center;
+   justify-content: center;
 
    cursor: pointer;
 }
@@ -130,7 +134,7 @@
    height: 80px;
    width: 80px;
 
-   background: #EEE6CE;
+   background: #128c80;
 
    border-radius: 50%;
    border: 4px solid #181a29;
@@ -141,11 +145,74 @@
 
    cursor: pointer;
    user-select: none;
-   user-drag: none;
 }
 
 .move:hover {
-   background: #E8DDBD;
+   background: #139487;
+}
+
+.gameArea {
+   height: 100%;
+   width: 100%;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-around;
+   align-items: center;
+}
+
+.gameArea>div {
+   width: 100%;
+   flex: 1;
+}
+
+.opponentArea {
+   transform: rotate(180deg);
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.playerArea {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+}
+
+.versus {
+   color: #EEE6CE;
+   font-weight: 100;
+   font-size: 1.2rem;
+
+   display: flex;
+   flex-direction: column;
+   justify-content: space-between;
+   align-items: center;
+}
+
+.playerTitle {
+   font-size: 1.5rem;
+   font-weight: 300;
+   color: #EEE6CE;
+}
+
+.finalMove {
+   height: 100px;
+   width: 100px;
+
+   background: #f86c55;
+
+   border-radius: 50%;
+   border: 4px solid #181a29;
+
+   display: flex;
+   justify-content: center;
+   align-items: center;
+
+   cursor: pointer;
+   user-select: none;
 }
 
 

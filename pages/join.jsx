@@ -9,6 +9,10 @@ const Join = () => {
 	const router = useRouter();
 	const [roomID, setRoomID] = useState('');
 
+	const handleChange = (e) => {
+		setRoomID(e.target.value.toUpperCase());
+	};
+
 	const handleClick = () => {
 		router.push(roomID);
 	};
@@ -27,13 +31,20 @@ const Join = () => {
 						<input
 							placeholder="Room ID"
 							value={roomID}
-							onChange={(e) => setRoomID(e.target.value)}
+							onChange={handleChange}
+							maxLength={4}
 						/>
 					</section>
 
 					<div className={styles.buttons}>
 						<button className={styles.button} onClick={handleClick}>
 							Join Room
+						</button>
+						<button
+							className={styles.button}
+							onClick={() => router.back()}
+						>
+							Go Back
 						</button>
 					</div>
 				</div>

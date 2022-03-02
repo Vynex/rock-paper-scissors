@@ -38,11 +38,11 @@ const SocketHandler = async (req, res) => {
 						if (p1.user === socket.id) p1.move = move;
 						else p2.move = move;
 
-						if (p1.move !== '' && p2.move !== '') {
-							const winnerID = getWinner(p1, p2);
+						if (p1.move && p2.move) {
+							const result = getResult(p1, p2);
 
-							socket.to(roomID).emit('game-finished', winnerID);
-							callback(winnerID);
+							socket.to(roomID).emit('game-finished', result);
+							callback(result);
 						}
 					});
 				} else {
@@ -66,22 +66,28 @@ const SocketHandler = async (req, res) => {
 	res.end();
 };
 
-const getWinner = (player1, player2) => {
+const getResult = (player1, player2) => {
 	if (player1.move === player2.move) {
-		return null;
+		return { status: 'Tie', winner: null };
 	}
 
 	if (player1.move === 'Rock') {
-		if (player2.move === 'Scissors') return player1.user;
-		if (player2.move === 'Paper') return player2.user;
+		if (player2.move === 'Scissors')
+			return { status: 'Win', winner: player1.user };
+		if (player2.move === 'Paper')
+			return { status: 'Win', winner: player2.user };
 	}
 	if (player1.move === 'Paper') {
-		if (player2.move === 'Rock') return player1.user;
-		if (player2.move === 'Scissors') return player2.user;
+		if (player2.move === 'Rock')
+			return { status: 'Win', winner: player1.user };
+		if (player2.move === 'Scissors')
+			return { status: 'Win', winner: player2.user };
 	}
 	if (player1.move === 'Scissors') {
-		if (player2.move === 'Paper') return player1.user;
-		if (player2.move === 'Rock') return player2.user;
+		if (player2.move === 'Paper')
+			return { status: 'Win', winner: player1.user };
+		if (player2.move === 'Rock')
+			return { status: 'Win', winner: player2.user };
 	}
 };
 
