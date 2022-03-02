@@ -100,7 +100,7 @@ const Room = () => {
 
 	const handleLeave = () => {
 		cleanUp();
-		router.back();
+		router.push('/');
 	};
 
 	const handleRoomCopy = () => {
