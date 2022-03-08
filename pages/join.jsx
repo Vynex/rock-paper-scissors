@@ -40,10 +40,7 @@ const Join = () => {
 						<button className={styles.button} onClick={handleClick}>
 							Join Room
 						</button>
-						<button
-							className={styles.button}
-							onClick={() => router.back()}
-						>
+						<button className={styles.button} onClick={() => router.push('/')}>
 							Go Back
 						</button>
 					</div>

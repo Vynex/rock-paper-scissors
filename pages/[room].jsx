@@ -174,9 +174,7 @@ const Room = () => {
 
 						<div className={styles.versus}>
 							<div className={styles.playerTitle}>Opponent</div>
-							<div>
-								{phase === 'Result' ? renderResult() : <span>Vs.</span>}
-							</div>
+							<div>{phase === 'Result' ? renderResult() : <span>Vs.</span>}</div>
 							<div className={styles.playerTitle}>You</div>
 						</div>
 
@@ -190,22 +188,13 @@ const Room = () => {
 
 								{phase === 'Ready' && (
 									<div className={styles.moves}>
-										<div
-											className={styles.move}
-											onClick={() => handleMove(1)}
-										>
+										<div className={styles.move} onClick={() => handleMove(1)}>
 											<Move move="Rock" />
 										</div>
-										<div
-											className={styles.move}
-											onClick={() => handleMove(2)}
-										>
+										<div className={styles.move} onClick={() => handleMove(2)}>
 											<Move move="Paper" />
 										</div>
-										<div
-											className={styles.move}
-											onClick={() => handleMove(3)}
-										>
+										<div className={styles.move} onClick={() => handleMove(3)}>
 											<Move move="Scissors" />
 										</div>
 									</div>
